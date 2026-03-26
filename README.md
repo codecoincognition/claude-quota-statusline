@@ -19,12 +19,12 @@
 <br>
 
 <p align="center">
-  <code>⟡ 5h: 23% │ 7d: 41%</code>
+  <img src="screenshot.png" alt="claude-quota-statusline in action" width="500">
 </p>
 
 <p align="center">
-  Shows your rolling 5-hour and 7-day quota usage after each response.<br>
-  🟢 Green (&lt;80%) &middot; 🟡 Yellow (80-94%) &middot; 🔴 Red (95%+)
+  Shows how much of your quota you've <strong>used</strong> — rolling 5-hour and 7-day windows, updated after every response.<br>
+  🟢 Green (&lt;80% used) &middot; 🟡 Yellow (80-94% used) &middot; 🔴 Red (95%+ used)
 </p>
 
 <br>
