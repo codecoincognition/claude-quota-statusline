@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/codecoincognition/claude-quota-statusline/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
-  <a href="#install"><img src="https://img.shields.io/badge/platform-macOS-lightgrey.svg" alt="macOS"></a>
+  <img src="https://img.shields.io/badge/platform-macOS-lightgrey.svg" alt="macOS">
   <a href="https://github.com/codecoincognition/claude-quota-statusline/stargazers"><img src="https://img.shields.io/github/stars/codecoincognition/claude-quota-statusline?style=social" alt="Stars"></a>
 </p>
 
@@ -22,36 +22,10 @@
   <code>⟡ 5h: 23% │ 7d: 41%</code>
 </p>
 
-<br>
-
----
-
-<br>
-
-## What You Get
-
-<table>
-  <tr>
-    <td><strong>01</strong></td>
-    <td><strong>5-Hour Window</strong></td>
-    <td>Rolling 5-hour rate limit usage — your immediate budget</td>
-  </tr>
-  <tr>
-    <td><strong>02</strong></td>
-    <td><strong>7-Day Window</strong></td>
-    <td>Weekly quota consumption — your long-term budget</td>
-  </tr>
-  <tr>
-    <td><strong>03</strong></td>
-    <td><strong>Color Coding</strong></td>
-    <td>🟢 Green (&lt;80%) &middot; 🟡 Yellow (80-94%) &middot; 🔴 Red (95%+)</td>
-  </tr>
-  <tr>
-    <td><strong>04</strong></td>
-    <td><strong>Zero Config</strong></td>
-    <td>One command install — auto-patches your settings</td>
-  </tr>
-</table>
+<p align="center">
+  Shows your rolling 5-hour and 7-day quota usage after each response.<br>
+  🟢 Green (&lt;80%) &middot; 🟡 Yellow (80-94%) &middot; 🔴 Red (95%+)
+</p>
 
 <br>
 
@@ -100,7 +74,7 @@ Then **restart Claude Code**.
 
 <br>
 
-> **Requirements:** macOS &middot; [Claude Code](https://docs.anthropic.com/en/docs/claude-code) &middot; `jq` (auto-installed via Homebrew if missing)
+> **Requirements:** macOS &middot; [Claude Code](https://docs.anthropic.com/en/docs/claude-code) (Pro or Max subscription) &middot; `jq` (auto-installed via Homebrew if missing)
 
 <br>
 
@@ -110,38 +84,11 @@ Then **restart Claude Code**.
 
 ## How It Works
 
-Claude Code's `statusLine` feature pipes JSON to a configured command after each assistant response:
+Claude Code's `statusLine` feature pipes JSON to a configured command after each assistant response. The JSON includes `rate_limits.five_hour.used_percentage` and `rate_limits.seven_day.used_percentage`. The script extracts both via `jq` and displays them with ANSI color codes.
 
-```json
-{
-  "rate_limits": {
-    "five_hour":  { "used_percentage": 23.5, "resets_at": 1738425600 },
-    "seven_day":  { "used_percentage": 41.2, "resets_at": 1738857600 }
-  }
-}
-```
-
-The script reads stdin, extracts both percentages via `jq`, and outputs a color-coded line using ANSI escape codes. Before the first API response in a session, the status bar shows `⟡ quota: waiting…`.
-
-<br>
-
-<details>
-<summary><strong>Works with</strong></summary>
-
-<br>
-
-<table>
-  <tr>
-    <td align="center"><strong>Claude Pro</strong><br><sub>Subscription</sub></td>
-    <td align="center"><strong>Claude Max</strong><br><sub>Subscription</sub></td>
-    <td align="center"><strong>macOS Terminal</strong><br><sub>Platform</sub></td>
-    <td align="center"><strong>iTerm2</strong><br><sub>Platform</sub></td>
-  </tr>
-</table>
+Before the first API response in a session, the status bar shows `⟡ quota: waiting…`.
 
 > **Note:** API key users won't see quota data — the `rate_limits` field is only present for Claude.ai subscribers.
-
-</details>
 
 <br>
 
