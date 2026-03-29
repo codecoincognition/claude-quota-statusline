@@ -13,6 +13,7 @@
 <p align="center">
   <a href="#install">Install</a> &middot;
   <a href="#how-it-works">How It Works</a> &middot;
+  <a href="#display-modes">Display Modes</a> &middot;
   <a href="#uninstall">Uninstall</a>
 </p>
 
@@ -98,6 +99,32 @@ The script renders a **10-block progress bar** for each window using filled (`�
 Before the first API response in a session, the status bar shows `⟡ quota: waiting…`.
 
 > **Note:** API key users won't see quota data — the `rate_limits` field is only present for Claude.ai subscribers.
+
+<br>
+
+---
+
+<br>
+
+## Display Modes
+
+The script supports two display modes via the `--mode` flag:
+
+| Mode | Flag | Output |
+|------|------|--------|
+| **Bar** (default) | `--mode bar` | `⟡ 5h: ███████░░░ 67% │ 7d: ██░░░░░░░░ 20%` |
+| **Text** | `--mode text` | `⟡ 5h: 67% │ 7d: 20%` |
+
+To switch modes, update the `command` in `~/.claude/settings.json`:
+
+```json
+"statusLine": {
+  "type": "command",
+  "command": "bash ~/.claude/quota-statusline.sh --mode text"
+}
+```
+
+Then restart Claude Code.
 
 <br>
 
