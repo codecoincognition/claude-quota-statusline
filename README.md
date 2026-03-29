@@ -91,9 +91,9 @@ The script renders a **10-block progress bar** for each window using filled (`�
 
 | Usage | Color | Example |
 |-------|-------|---------|
-| < 80% | Green | `████░░░░░░ 40%` |
-| 80-94% | Yellow | `████████░░ 82%` |
-| 95%+ | Red | `██████████ 98%` |
+| < 80% | 🟢 Green | `████░░░░░░ 40%` |
+| 80-94% | 🟡 Yellow | `████████░░ 82%` |
+| 95%+ | 🔴 Red | `██████████ 98%` |
 
 Before the first API response in a session, the status bar shows `⟡ quota: waiting…`.
 
