@@ -38,20 +38,22 @@
 
 ## Install
 
-<table>
-<tr>
-<td><strong>One-liner (recommended)</strong></td>
-<td><strong>Manual</strong></td>
-</tr>
-<tr>
-<td>
+### One-liner (recommended)
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/codecoincognition/claude-quota-statusline/main/install.sh | bash
 ```
 
-</td>
-<td>
+This downloads the script to `~/.claude/`, installs `jq` if needed, and patches your `settings.json`.
+
+<br>
+
+<details>
+<summary><strong>Manual install</strong></summary>
+
+<br>
+
+**1. Clone and copy the script:**
 
 ```bash
 git clone https://github.com/codecoincognition/claude-quota-statusline.git
@@ -60,7 +62,7 @@ cp quota-statusline.sh ~/.claude/
 chmod +x ~/.claude/quota-statusline.sh
 ```
 
-Then add to `~/.claude/settings.json`:
+**2. Add to `~/.claude/settings.json`:**
 
 ```json
 "statusLine": {
@@ -69,13 +71,15 @@ Then add to `~/.claude/settings.json`:
 }
 ```
 
-> Want progress bars instead? Use `--mode bar` — see <a href="#display-modes">Display Modes</a>.
+**3. Restart Claude Code.**
 
-</td>
-</tr>
-</table>
+</details>
 
-Then **restart Claude Code**.
+<br>
+
+Then **restart Claude Code** (both methods).
+
+> Want visual progress bars? Add `--mode bar` — see <a href="#display-modes">Display Modes</a>.
 
 <br>
 
@@ -107,9 +111,9 @@ Both modes use ANSI color coding based on usage:
 
 | Usage | Color | Text | Bar |
 |-------|-------|------|-----|
-| < 80% | 🟢 Green | `67%` | `███████░░░ 67%` |
-| 80-94% | 🟡 Yellow | `82%` | `████████░░ 82%` |
-| 95%+ | 🔴 Red | `98%` | `██████████ 98%` |
+| < 80% | 🟢 Green | `67%` | `███████░░░` |
+| 80-94% | 🟡 Yellow | `82%` | `████████░░` |
+| 95%+ | 🔴 Red | `98%` | `██████████` |
 
 Before the first API response in a session, the status bar shows `⟡ quota: waiting…`.
 
@@ -125,12 +129,14 @@ Before the first API response in a session, the status bar shows `⟡ quota: wai
 
 The script supports two display modes via the `--mode` flag:
 
-| Mode | Flag | Output |
-|------|------|--------|
-| **Text** (default) | `--mode text` | `⟡ 5h: 67% │ 7d: 20%` |
-| **Bar** | `--mode bar` | `⟡ 5h: ███████░░░ 67% │ 7d: ██░░░░░░░░ 20%` |
+| Mode | Flag | Example |
+|------|------|---------|
+| **Text** (default) | none | `⟡ 5h: 67% │ 7d: 20%` |
+| **Bar** | `--mode bar` | `⟡ 5h: ███████░░░ 67%` |
 
-No flag needed for text mode — it's the default. To enable the progress bar, update the `command` in `~/.claude/settings.json`:
+No flag needed for text mode — it's the default.
+
+To enable the progress bar, update the `command` in `~/.claude/settings.json`:
 
 ```json
 "statusLine": {
