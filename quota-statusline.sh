@@ -3,7 +3,7 @@
 # Reads JSON from stdin (piped by Claude Code's statusLine feature)
 # Usage: bash quota-statusline.sh [--mode bar|text]
 
-MODE="bar"
+MODE="text"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --mode) MODE="$2"; shift 2 ;;

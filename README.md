@@ -1,7 +1,7 @@
 <h1 align="center">claude-quota-statusline</h1>
 
 <p align="center">
-  <strong>Visual progress bars for your Claude Code quota — right in the status bar.</strong>
+  <strong>See your Claude Code quota usage — right in the status bar.</strong>
 </p>
 
 <p align="center">
@@ -24,9 +24,10 @@
 </p>
 
 <p align="center">
-  Visual progress bars showing your quota usage — rolling 5-hour and 7-day windows, updated after every response.<br>
-  <code>⟡ 5h: ██████░░░░ 60% │ 7d: ██░░░░░░░░ 20%</code><br><br>
-  🟢 Green (&lt;80%) &middot; 🟡 Yellow (80-94%) &middot; 🔴 Red (95%+)
+  Shows your quota usage — rolling 5-hour and 7-day windows, updated after every response.<br>
+  <code>⟡ 5h: 60% │ 7d: 20%</code><br><br>
+  🟢 Green (&lt;80%) &middot; 🟡 Yellow (80-94%) &middot; 🔴 Red (95%+)<br>
+  Text mode (default) or <a href="#display-modes">visual progress bars</a>
 </p>
 
 <br>
@@ -68,6 +69,8 @@ Then add to `~/.claude/settings.json`:
 }
 ```
 
+> Want progress bars instead? Use `--mode bar` — see <a href="#display-modes">Display Modes</a>.
+
 </td>
 </tr>
 </table>
@@ -88,13 +91,25 @@ Then **restart Claude Code**.
 
 Claude Code's `statusLine` feature pipes JSON to a configured command after each assistant response. The JSON includes `rate_limits.five_hour.used_percentage` and `rate_limits.seven_day.used_percentage`.
 
-The script renders a **10-block progress bar** for each window using filled (`█`) and empty (`░`) characters, with ANSI color coding:
+By default, the script displays **color-coded percentages** for both quota windows:
 
-| Usage | Color | Example |
-|-------|-------|---------|
-| < 80% | 🟢 Green | `████░░░░░░ 40%` |
-| 80-94% | 🟡 Yellow | `████████░░ 82%` |
-| 95%+ | 🔴 Red | `██████████ 98%` |
+```
+⟡ 5h: 67% │ 7d: 20%
+```
+
+You can also switch to a **visual progress bar** mode (`--mode bar`) that renders a 10-block bar alongside the percentage:
+
+```
+⟡ 5h: ███████░░░ 67% │ 7d: ██░░░░░░░░ 20%
+```
+
+Both modes use ANSI color coding based on usage:
+
+| Usage | Color | Text | Bar |
+|-------|-------|------|-----|
+| < 80% | 🟢 Green | `67%` | `███████░░░ 67%` |
+| 80-94% | 🟡 Yellow | `82%` | `████████░░ 82%` |
+| 95%+ | 🔴 Red | `98%` | `██████████ 98%` |
 
 Before the first API response in a session, the status bar shows `⟡ quota: waiting…`.
 
@@ -112,15 +127,15 @@ The script supports two display modes via the `--mode` flag:
 
 | Mode | Flag | Output |
 |------|------|--------|
-| **Bar** (default) | `--mode bar` | `⟡ 5h: ███████░░░ 67% │ 7d: ██░░░░░░░░ 20%` |
-| **Text** | `--mode text` | `⟡ 5h: 67% │ 7d: 20%` |
+| **Text** (default) | `--mode text` | `⟡ 5h: 67% │ 7d: 20%` |
+| **Bar** | `--mode bar` | `⟡ 5h: ███████░░░ 67% │ 7d: ██░░░░░░░░ 20%` |
 
-To switch modes, update the `command` in `~/.claude/settings.json`:
+No flag needed for text mode — it's the default. To enable the progress bar, update the `command` in `~/.claude/settings.json`:
 
 ```json
 "statusLine": {
   "type": "command",
-  "command": "bash ~/.claude/quota-statusline.sh --mode text"
+  "command": "bash ~/.claude/quota-statusline.sh --mode bar"
 }
 ```
 
