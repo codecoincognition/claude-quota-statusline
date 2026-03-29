@@ -1,5 +1,5 @@
 #!/bin/bash
-# Claude Code status line — shows quota usage % with color coding
+# Claude Code status line — shows quota usage with visual progress bar
 # Reads JSON from stdin (piped by Claude Code's statusLine feature)
 
 read -r input
@@ -12,24 +12,42 @@ if [[ -z "$five_h" && -z "$seven_d" ]]; then
   exit 0
 fi
 
-colorize() {
+render_bar() {
   local pct="${1%.*}"
   pct=${pct:-0}
-  if (( pct >= 95 )); then printf '\e[31m%s%%\e[0m' "$pct"    # red
-  elif (( pct >= 80 )); then printf '\e[33m%s%%\e[0m' "$pct"   # yellow
-  else printf '\e[32m%s%%\e[0m' "$pct"                          # green
+
+  # Clamp to 0-100
+  (( pct < 0 )) && pct=0
+  (( pct > 100 )) && pct=100
+
+  # Compute filled blocks (round: +5 then /10)
+  local filled=$(( (pct + 5) / 10 ))
+  local empty=$(( 10 - filled ))
+
+  # Color by threshold
+  local color
+  if (( pct >= 95 )); then color='\e[31m'    # red
+  elif (( pct >= 80 )); then color='\e[33m'   # yellow
+  else color='\e[32m'                          # green
   fi
+
+  # Build bar
+  local bar=""
+  for (( i=0; i<filled; i++ )); do bar+="█"; done
+  for (( i=0; i<empty; i++ )); do bar+="░"; done
+
+  printf "${color}${bar} ${pct}%%\e[0m"
 }
 
 output="⟡ "
 if [[ -n "$five_h" ]]; then
-  output+="5h: $(colorize "$five_h")"
+  output+="5h: $(render_bar "$five_h")"
 fi
 if [[ -n "$five_h" && -n "$seven_d" ]]; then
   output+=" │ "
 fi
 if [[ -n "$seven_d" ]]; then
-  output+="7d: $(colorize "$seven_d")"
+  output+="7d: $(render_bar "$seven_d")"
 fi
 
 printf '%b\n' "$output"

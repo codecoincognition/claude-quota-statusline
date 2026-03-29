@@ -1,7 +1,7 @@
 <h1 align="center">claude-quota-statusline</h1>
 
 <p align="center">
-  <strong>See your Claude Code quota usage — right in the status bar.</strong>
+  <strong>Visual progress bars for your Claude Code quota — right in the status bar.</strong>
 </p>
 
 <p align="center">
@@ -23,8 +23,9 @@
 </p>
 
 <p align="center">
-  Shows how much of your quota you've <strong>used</strong> — rolling 5-hour and 7-day windows, updated after every response.<br>
-  🟢 Green (&lt;80% used) &middot; 🟡 Yellow (80-94% used) &middot; 🔴 Red (95%+ used)
+  Visual progress bars showing your quota usage — rolling 5-hour and 7-day windows, updated after every response.<br>
+  <code>⟡ 5h: ██████░░░░ 60% │ 7d: ██░░░░░░░░ 20%</code><br><br>
+  🟢 Green (&lt;80%) &middot; 🟡 Yellow (80-94%) &middot; 🔴 Red (95%+)
 </p>
 
 <br>
@@ -84,7 +85,15 @@ Then **restart Claude Code**.
 
 ## How It Works
 
-Claude Code's `statusLine` feature pipes JSON to a configured command after each assistant response. The JSON includes `rate_limits.five_hour.used_percentage` and `rate_limits.seven_day.used_percentage`. The script extracts both via `jq` and displays them with ANSI color codes.
+Claude Code's `statusLine` feature pipes JSON to a configured command after each assistant response. The JSON includes `rate_limits.five_hour.used_percentage` and `rate_limits.seven_day.used_percentage`.
+
+The script renders a **10-block progress bar** for each window using filled (`█`) and empty (`░`) characters, with ANSI color coding:
+
+| Usage | Color | Example |
+|-------|-------|---------|
+| < 80% | Green | `████░░░░░░ 40%` |
+| 80-94% | Yellow | `████████░░ 82%` |
+| 95%+ | Red | `██████████ 98%` |
 
 Before the first API response in a session, the status bar shows `⟡ quota: waiting…`.
 
