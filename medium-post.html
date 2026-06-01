@@ -1,0 +1,59 @@
+<h1>I Built a Free Tool to Show Your Claude Code Quota Usage in the Status Bar</h1>
+
+<p>If you use Claude Code with a Pro or Max subscription on Mac, you've probably hit that moment mid-session: <em>how much of my quota have I actually burned through?</em></p>
+
+<p>You could type <code>/usage</code> inside a session and check. But that breaks your flow. What if the answer was just… always there?</p>
+
+<h2>What it looks like</h2>
+
+<img src="https://raw.githubusercontent.com/codecoincognition/claude-quota-statusline/main/screenshot.png" alt="claude-quota-statusline screenshot" width="500">
+
+<p>A single line at the bottom of your Claude Code terminal:</p>
+
+<pre>⟡ 5h: 25% │ 7d: 21%</pre>
+
+<p>That's it. Two numbers — how much of your 5-hour rolling window and 7-day weekly quota you've <strong>used</strong>. Updated automatically after every Claude response.</p>
+
+<p>The colors shift as you approach your limit:</p>
+
+<ul>
+<li><strong>Green</strong> — under 80% used, you're good</li>
+<li><strong>Yellow</strong> — 80–94% used, start wrapping up</li>
+<li><strong>Red</strong> — 95%+ used, almost out</li>
+</ul>
+
+<h2>How it works</h2>
+
+<p>Claude Code has a <code>statusLine</code> feature — it pipes JSON metadata to a configured script after every assistant response. That metadata already includes your quota usage percentages. No extra API calls. Zero quota cost.</p>
+
+<p>The tool is a single shell script that reads that JSON via <code>jq</code> and formats it with color codes. The installer copies the script to <code>~/.claude/</code> and patches your <code>settings.json</code> — nothing else gets touched.</p>
+
+<h2>Install in 10 seconds</h2>
+
+<p>macOS only. One command:</p>
+
+<pre>curl -fsSL https://raw.githubusercontent.com/codecoincognition/claude-quota-statusline/main/install.sh | bash</pre>
+
+<p>Then restart Claude Code. That's it.</p>
+
+<p>If you don't have <code>jq</code> installed, the installer handles it automatically via Homebrew. If you don't have Homebrew either, it'll tell you what to do.</p>
+
+<h2>Uninstall</h2>
+
+<p>Just as easy:</p>
+
+<pre>bash <(curl -fsSL https://raw.githubusercontent.com/codecoincognition/claude-quota-statusline/main/uninstall.sh)</pre>
+
+<h2>Why I built this</h2>
+
+<p>I spend a lot of my day inside Claude Code. I kept running into rate limits without realizing I was close. Having the usage percentage visible at all times changed how I pace my sessions — I batch lighter tasks when I'm running high and save the heavy lifting for when I have headroom.</p>
+
+<p>It's a small quality-of-life improvement, but the kind that compounds over every session.</p>
+
+<h2>Get it</h2>
+
+<p>Open source, MIT licensed, free to use.</p>
+
+<p><strong>GitHub:</strong> <a href="https://github.com/codecoincognition/claude-quota-statusline">codecoincognition/claude-quota-statusline</a></p>
+
+<p>If this saves you from one surprise rate limit, give it a star.</p>

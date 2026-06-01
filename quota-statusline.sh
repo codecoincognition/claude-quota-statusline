@@ -21,12 +21,31 @@ if [[ -z "$five_h" && -z "$seven_d" ]]; then
   exit 0
 fi
 
+# Detect Claude theme to adjust contrast
+THEME=$(jq -r '.theme // "dark"' ~/.claude/settings.json 2>/dev/null)
+
+if [[ "$THEME" == "light" ]]; then
+  # High-contrast bold/darker colors for light background
+  COLOR_RED='\e[1;31m'
+  COLOR_YELLOW='\e[1;33m' # Bold yellow/brown has excellent readability on light BG
+  COLOR_GREEN='\e[1;32m'  # Bold green is dark and very readable
+  COLOR_RESET='\e[0m'
+  COLOR_DIM='\e[2m'       # Dim adapts to terminal background, perfect for empty bar
+else
+  # Bright colors for dark background
+  COLOR_RED='\e[31m'
+  COLOR_YELLOW='\e[33m'
+  COLOR_GREEN='\e[32m'
+  COLOR_RESET='\e[0m'
+  COLOR_DIM='\e[2m'
+fi
+
 colorize() {
   local pct="${1%.*}"
   pct=${pct:-0}
-  if (( pct >= 95 )); then printf '\e[31m%s%%\e[0m' "$pct"
-  elif (( pct >= 80 )); then printf '\e[33m%s%%\e[0m' "$pct"
-  else printf '\e[32m%s%%\e[0m' "$pct"
+  if (( pct >= 95 )); then printf "${COLOR_RED}%s%%${COLOR_RESET}" "$pct"
+  elif (( pct >= 80 )); then printf "${COLOR_YELLOW}%s%%${COLOR_RESET}" "$pct"
+  else printf "${COLOR_GREEN}%s%%${COLOR_RESET}" "$pct"
   fi
 }
 
@@ -41,16 +60,22 @@ render_bar() {
   local empty=$(( 10 - filled ))
 
   local color
-  if (( pct >= 95 )); then color='\e[31m'
-  elif (( pct >= 80 )); then color='\e[33m'
-  else color='\e[32m'
+  if (( pct >= 95 )); then color="${COLOR_RED}"
+  elif (( pct >= 80 )); then color="${COLOR_YELLOW}"
+  else color="${COLOR_GREEN}"
   fi
 
-  local bar=""
+  local bar="${color}"
   for (( i=0; i<filled; i++ )); do bar+="█"; done
-  for (( i=0; i<empty; i++ )); do bar+="░"; done
+  bar+="${COLOR_RESET}"
 
-  printf "${color}${bar} ${pct}%%\e[0m"
+  if (( empty > 0 )); then
+    bar+="${COLOR_DIM}"
+    for (( i=0; i<empty; i++ )); do bar+="░"; done
+    bar+="${COLOR_RESET}"
+  fi
+
+  printf "${bar} ${color}${pct}%%${COLOR_RESET}"
 }
 
 render() {
